@@ -32,14 +32,20 @@ public class Main {
         File LOCATION_CFG = null;
         
         chooser.setDialogTitle("Select the input directory!");
-        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        int ask = chooser.showOpenDialog(null);
+        if (ask == JFileChooser.APPROVE_OPTION) {
             LOCATION_IN = chooser.getSelectedFile();
             System.out.println(LOCATION_IN);
+        } else if(ask == JFileChooser.CANCEL_OPTION) {
+        	return;
         }
         chooser.setDialogTitle("Select the output directory!");
-        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        ask = chooser.showOpenDialog(null);
+        if (ask == JFileChooser.APPROVE_OPTION) {
             LOCATION_OUT = chooser.getSelectedFile();
             System.out.println(LOCATION_OUT);
+        } else if(ask == JFileChooser.CANCEL_OPTION) {
+        	return;
         }
         boolean RIGHT_ENABLED = JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,
                 "Do you want to also merge right eye images? These might cause problems if 3D was not enabled when the screenshots were taken!", "Enable right eye?",
@@ -58,7 +64,8 @@ public class Main {
                 
         if(TEMPLATE){
             chooser.setDialogTitle("Select the folder with template.cfg and .png!");
-            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            ask = chooser.showOpenDialog(null);
+            if (ask == JFileChooser.APPROVE_OPTION) {
                 LOCATION_CFG = chooser.getSelectedFile();
                 System.out.println(LOCATION_CFG);
                 try {
@@ -84,6 +91,8 @@ public class Main {
                     TEMPLATE = false;
                     e.printStackTrace();
                 }
+            } else if(ask == JFileChooser.CANCEL_OPTION) {
+            	return;
             }
        }
         
