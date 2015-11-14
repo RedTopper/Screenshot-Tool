@@ -1,4 +1,4 @@
-package red;
+package red; 
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -47,45 +47,45 @@ public class Main {
         boolean TEMPLATE = JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,
                 "Do you want to use the template.cfg and template.png? see README.md for details.", "Use template?",
                 JOptionPane.YES_NO_OPTION);
+             
+        FileInputStream fis;
+        BufferedImage buffTemplateOriginal = null;
+        
+        int TOPX = 0;
+        int TOPY = 0;
+        int BOTX = 40;
+        int BOTY = 240;
                 
         if(TEMPLATE){
             chooser.setDialogTitle("Select the folder with template.cfg and .png!");
             if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 LOCATION_CFG = chooser.getSelectedFile();
                 System.out.println(LOCATION_CFG);
-            }
-       }
-        
-        int TOPX = 0;
-        int TOPY = 0;
-        int BOTX = 40;
-        int BOTY = 240;
-        
-        FileInputStream fis;
-        BufferedImage buffTemplateOriginal = null;
-        try {
-            fis = new FileInputStream(new File(LOCATION_CFG.toString() + File.separator + "template.cfg"));
-            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-            String line = null;
-            while ((line = br.readLine()) != null) {
-                if(line.contains("top:")) {
-                    TOPX = Integer.parseInt(line.substring(line.indexOf(":") + 1, line.indexOf(",")));
-                    TOPY = Integer.parseInt(line.substring(line.indexOf(",") + 1));
-                } else if(line.contains("bottom:")) {
-                    BOTX = Integer.parseInt(line.substring(line.indexOf(":") + 1, line.indexOf(",")));
-                    BOTY = Integer.parseInt(line.substring(line.indexOf(",") + 1));
+                try {
+                    fis = new FileInputStream(new File(LOCATION_CFG.toString() + File.separator + "template.cfg"));
+                    BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+                    String line = null;
+                    while ((line = br.readLine()) != null) {
+                        if(line.contains("top:")) {
+                            TOPX = Integer.parseInt(line.substring(line.indexOf(":") + 1, line.indexOf(",")));
+                            TOPY = Integer.parseInt(line.substring(line.indexOf(",") + 1));
+                        } else if(line.contains("bottom:")) {
+                            BOTX = Integer.parseInt(line.substring(line.indexOf(":") + 1, line.indexOf(",")));
+                            BOTY = Integer.parseInt(line.substring(line.indexOf(",") + 1));
+                        }
+                    }
+                 
+                    br.close();
+                    buffTemplateOriginal = ImageIO.read(new File(LOCATION_CFG + File.separator + "template.png"));
+                } catch (FileNotFoundException e1) {
+                    TEMPLATE = false;
+                    e1.printStackTrace();
+                } catch (IOException e) {
+                    TEMPLATE = false;
+                    e.printStackTrace();
                 }
             }
-         
-            br.close();
-            buffTemplateOriginal = ImageIO.read(new File(LOCATION_CFG + File.separator + "template.png"));
-        } catch (FileNotFoundException e1) {
-            TEMPLATE = false;
-            e1.printStackTrace();
-        } catch (IOException e) {
-            TEMPLATE = false;
-            e.printStackTrace();
-        }
+       }
         
         File[] listOfFiles = LOCATION_IN.listFiles();
         ArrayList<String> files = new ArrayList<>();

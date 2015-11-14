@@ -1,4 +1,4 @@
-package red;
+package red; 
 
 public class ImagePair {
 	String image1;

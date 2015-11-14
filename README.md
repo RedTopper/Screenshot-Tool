@@ -11,8 +11,8 @@ This screenshot tool takes a batch of exported screenshots and makes them into n
 7. Profit!
 
 ###How to use template.cfg and template.png:
-1. Create template.png. It must be big enough to contain both the top and bottom screenshot. Put it in the input folder.
-2. Create template.cfg. Also put it in the input folder. It looks like this:
+1. Create template.png. It must be big enough to contain both the top and bottom screenshot. Put it in any empty folder.
+2. Create template.cfg. Put it in the template.png folder. It'll look like this:
 ```text
 top:91,50
 bottom:131,360

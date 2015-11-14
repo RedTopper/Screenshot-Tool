@@ -1,4 +1,4 @@
-package red;
+package red; 
 
 @SuppressWarnings("serial")
 public class UnmatchedException extends Exception {
