@@ -17,6 +17,11 @@ This screenshot tool takes a batch of exported screenshots and makes them into n
 top:91,50
 bottom:131,360
 ```
+
+- The top: and bottom: denote where the top and bottom screen images should be placed in the template.png The first number is the X location from the top left and the second number is the Y location from the top left (always positive, includes 0).
+- Notice how there is no spaces in this document. Do not add spaces. Java will yell at you.
+
+
 ### Name format:
 
 Names:
@@ -37,9 +42,6 @@ The numbers for the top screen should match up with the same number for the bott
 This is how the program tells the difference between a top and bottom image pair in order to
 merge them together. NTR and ninjahax images can exist in the same folder and will be merged
 independently! 
-
-- The top: and bottom: denote where the top and bottom screen images should be placed in the template.png The first number is the X location from the top left and the second number is the Y location from the top left (always positive, includes 0).
-- Notice how there is no spaces in this document. Do not add spaces. Java will yell at you.
 
 ###Examples output with template
 ![An example screenshot exported with a template.](./output/scr_68_MERGED.png "Screenshot")
