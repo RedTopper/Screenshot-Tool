@@ -19,13 +19,24 @@ bottom:131,360
 ```
 ### Name format:
 
-Name format can be: "scr_Xn_BOTTOM.xxx" (ninjahax), "scr_Xn_TOP_LEFT.xxx" (ninjahax), 
-"scr_Xn_TOP_RIGHT.xxx" (ninjahax), "bot_XXXX.xxx" (NTR), or "top_XXXX.xxx" (NTR) where 
-Xn is any amount of numbers, XXXX is a four digit number, and xxx is a picture format 
-(usually png or bmp). The numbers for the top screen (as Xn or XXXX, depending on how 
-you took the screenshot) should match up with the same number for the bottom screen.
+Names:
+
+* "scr_Xn_BOTTOM.xxx" (ninjahax)
+* "scr_Xn_TOP_LEFT.xxx" (ninjahax)
+* "scr_Xn_TOP_RIGHT.xxx" (ninjahax)
+* "bot_XXXX.xxx" (NTR)
+* "top_XXXX.xxx" (NTR)
+
+Where:
+
+* Xn is any amount of numbers
+* XXXX is a four digit number
+* xxx is a picture format (usually png or bmp)
+
+The numbers for the top screen should match up with the same number for the bottom screen.
 This is how the program tells the difference between a top and bottom image pair in order to
-merge them together.
+merge them together. NTR and ninjahax images can exist in the same folder and will be merged
+independently! 
 
 - The top: and bottom: denote where the top and bottom screen images should be placed in the template.png The first number is the X location from the top left and the second number is the Y location from the top left (always positive, includes 0).
 - Notice how there is no spaces in this document. Do not add spaces. Java will yell at you.
