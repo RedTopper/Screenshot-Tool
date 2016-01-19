@@ -3,7 +3,7 @@ This screenshot tool takes a batch of exported screenshots and makes them into n
 
 ###How to use this tool:
 1. Launch the program. You need Java installed on your computer.
-2. Select the INPUT folder. This is the folder with the broken images.
+2. Select the INPUT folder. This is the folder with the broken up images. See below for name format.
 3. Select the OUTPUT folder. This is the folder where all of the complete images will be written. 
 4. Chose if you want to also export the right eye. This option will create 2 files for every screenshot! Use with care!
 5. Chose if you want to use the template.cfg and template.png images in the input folder. 
@@ -17,6 +17,16 @@ This screenshot tool takes a batch of exported screenshots and makes them into n
 top:91,50
 bottom:131,360
 ```
+### Name format:
+
+Name format can be: "scr_Xn_BOTTOM.xxx" (ninjahax), "scr_Xn_TOP_LEFT.xxx" (ninjahax), 
+"scr_Xn_TOP_RIGHT.xxx" (ninjahax), "bot_XXXX.xxx" (NTR), or "top_XXXX.xxx" (NTR) where 
+Xn is any amount of numbers, XXXX is a four digit number, and xxx is a picture format 
+(usually png or bmp). The numbers for the top screen (as Xn or XXXX, depending on how 
+you took the screenshot) should match up with the same number for the bottom screen.
+This is how the program tells the difference between a top and bottom image pair in order to
+merge them together.
+
 - The top: and bottom: denote where the top and bottom screen images should be placed in the template.png The first number is the X location from the top left and the second number is the Y location from the top left (always positive, includes 0).
 - Notice how there is no spaces in this document. Do not add spaces. Java will yell at you.
 

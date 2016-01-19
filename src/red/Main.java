@@ -39,6 +39,7 @@ public class Main {
         } else if(ask == JFileChooser.CANCEL_OPTION) {
         	return;
         }
+        
         chooser.setDialogTitle("Select the output directory!");
         ask = chooser.showOpenDialog(null);
         if (ask == JFileChooser.APPROVE_OPTION) {
@@ -47,6 +48,7 @@ public class Main {
         } else if(ask == JFileChooser.CANCEL_OPTION) {
         	return;
         }
+        
         boolean RIGHT_ENABLED = JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,
                 "Do you want to also merge right eye images? These might cause problems if 3D was not enabled when the screenshots were taken!", "Enable right eye?",
                 JOptionPane.YES_NO_OPTION);
@@ -116,8 +118,9 @@ public class Main {
                             alreadyMatched = true;
                         }
                     }
-                    if(!alreadyMatched) {
+                    if(!alreadyMatched && pair.isReal()) {
                         pairs.add(pair);
+                        System.out.println("Matched: " + pair);
                     }
                 } catch (UnmatchedException e) {
                     //System.err.println("Failed to find a match for " + files.get(one) + " and " + files.get(two));
@@ -145,7 +148,6 @@ public class Main {
         for(int i = 0; i < pairs.size(); i++) {
             ImagePair pair = pairs.get(i);
             progressBar.setValue((int)(((double)i/(double)pairs.size())*100d));
-            System.out.println("Merge: " + pair);
             BufferedImage buffImageOne = null;
             BufferedImage buffImageTwo = null;
             try {
@@ -162,14 +164,16 @@ public class Main {
                     }
                     if(pair.isLeft()) {
                         try {
-                            ImageIO.write(finalImg, "png", new File(LOCATION_OUT + File.separator +  "scr_" + pair.getNumber() +"_MERGED.png"));
+                        	ImageIO.write(finalImg, "png", new File(LOCATION_OUT + File.separator +  (pair.isNTR() ? "NTR_" : "scr_") + pair.getNumber() +"_MERGED.png"));
+                            System.out.println("Wrote left: " + pair);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     } 
                     if(!pair.isLeft() && RIGHT_ENABLED){
                         try {
-                            ImageIO.write(finalImg, "png", new File(LOCATION_OUT + File.separator + "scr_" + pair.getNumber() +"_MERGED_RIGHT.png"));
+                        	ImageIO.write(finalImg, "png", new File(LOCATION_OUT + File.separator +  (pair.isNTR() ? "NTR_" : "scr_") + pair.getNumber() +"_MERGED_RIGHT.png"));
+                            System.out.println("Wrote right: " + pair);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -185,14 +189,16 @@ public class Main {
                     }
                     if(pair.isLeft()) {
                         try {
-                            ImageIO.write(buffTemplate, "png", new File(LOCATION_OUT + File.separator + "scr_" + pair.getNumber() +"_MERGED.png"));
+                        	ImageIO.write(buffTemplate, "png", new File(LOCATION_OUT + File.separator +  (pair.isNTR() ? "NTR_" : "scr_") + pair.getNumber() +"_MERGED.png"));
+                            System.out.println("Wrote (template) left: " + pair);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     } 
                     if(!pair.isLeft() && RIGHT_ENABLED){
                         try {
-                            ImageIO.write(buffTemplate, "png", new File(LOCATION_OUT + File.separator +  "scr_" + pair.getNumber() +"_MERGED_RIGHT.png"));
+                        	ImageIO.write(buffTemplate, "png", new File(LOCATION_OUT + File.separator +  (pair.isNTR() ? "NTR_" : "scr_") + pair.getNumber() +"_MERGED_RIGHT.png"));
+                            System.out.println("Wrote (template) right: " + pair);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
