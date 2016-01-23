@@ -6,7 +6,7 @@ This screenshot tool takes a batch of exported screenshots and makes them into n
 2. Select the INPUT folder. This is the folder with the broken up images. See below for name format.
 3. Select the OUTPUT folder. This is the folder where all of the complete images will be written. 
 4. Chose if you want to also export the right eye. This option will create 2 files for every screenshot! Use with care!
-5. Chose if you want to use the template.cfg and template.png images in the input folder. 
+5. Chose if you want to use the template.cfg and template.png images in a template folder.
 6. Wait for the images to process
 7. Profit!
 
@@ -32,7 +32,7 @@ Names:
 * "bot_XXXX.xxx" (NTR)
 * "top_XXXX.xxx" (NTR)
 
-Where:
+Where the values are:
 
 * Xn is any amount of numbers
 * XXXX is a four digit number
