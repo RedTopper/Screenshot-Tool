@@ -13,10 +13,9 @@ public class ImagePair {
 			throw new UnmatchedException();
 		}
 		if(image1.substring(0,4).equals("scr_") && image2.substring(0,4).equals("scr_")) {
-			if (image1.substring(0,image1.indexOf("_", 4))
-					.equals(image2.substring(0,image2.indexOf("_", 4))) &&
-			   !image1.substring(image1.indexOf("_",4))
-					.equals(image2.substring(image2.indexOf("_",4)))){
+			//We are now in Ninjahax Mode.
+			if (image1.substring(0,image1.indexOf("_", 4)).equals(image2.substring(0,image2.indexOf("_", 4))) &&
+			   !image1.substring(image1.indexOf("_",4)).equals(image2.substring(image2.indexOf("_",4)))){
 				this.image1 = image1;
 				this.image2 = image2;
 				try{
@@ -29,8 +28,17 @@ public class ImagePair {
 				}
 				init = true; //nice.
 			} 
-		} else if((image1.substring(0,3).equals("top") || image1.substring(0,3).equals("bot")) && 
-		   (image2.substring(0,3).equals("top") || image2.substring(0,3).equals("bot"))) { //extra check for ntr since I don't want it matching ninjahax ones.
+		} else if
+		
+				//Find NTR in English first
+				(((image1.substring(0,3).equals("top") || image1.substring(0,3).equals("bot")) && 
+				(image2.substring(0,3).equals("top") || image2.substring(0,3).equals("bot"))) ||
+				
+				//Or spanish I guess?
+				((image1.substring(0,3).equals("sup") || image1.substring(0,3).equals("inf")) && 
+				(image2.substring(0,3).equals("sup") || image2.substring(0,3).equals("inf")))) 
+			
+		{ //extra check for ntr since I don't want it matching ninjahax ones.
 			if (image1.substring(4,8)
 					.equals(image2.substring(4,8)) &&
 			   !image1.substring(0,image1.indexOf("_"))
