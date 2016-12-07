@@ -52,6 +52,7 @@ independently!
 ###Examples output with template
 ![An example screenshot exported with a template.](./output/ninjahax_68.png "Screenshot")
 ![An example screenshot exported with a template.](./output/ninjahax_119.png "Screenshot")
+![An example screenshot exported with a template.](./output/ninjahax_28.png "Screenshot")
 ![Using the NTR file name format.](./output/ntr_0001.png "Screenshot")
 
 ###Examples output without template
