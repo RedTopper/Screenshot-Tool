@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -21,93 +20,98 @@ import javax.swing.JProgressBar;
 import javax.swing.border.Border;
 
 public class Main {
-
-    public static void main(String[] args) {
+	
+	public static File getDirFromUser(String shortText, String titleText) {
         JFileChooser chooser = new JFileChooser(); 
         chooser.setCurrentDirectory(new java.io.File("."));
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
-        File LOCATION_IN = null;
-        File LOCATION_OUT = null;
-        File LOCATION_CFG = null;
-        
-        chooser.setDialogTitle("Select the input directory!");
+        chooser.setDialogTitle(titleText);
         int ask = chooser.showOpenDialog(null);
         if (ask == JFileChooser.APPROVE_OPTION) {
-            LOCATION_IN = chooser.getSelectedFile();
-            System.out.println(LOCATION_IN);
-        } else if(ask == JFileChooser.CANCEL_OPTION) {
-        	return;
-        }
-        
-        chooser.setDialogTitle("Select the output directory!");
-        ask = chooser.showOpenDialog(null);
-        if (ask == JFileChooser.APPROVE_OPTION) {
-            LOCATION_OUT = chooser.getSelectedFile();
-            System.out.println(LOCATION_OUT);
-        } else if(ask == JFileChooser.CANCEL_OPTION) {
-        	return;
-        }
-        
+            System.out.println(shortText + ": " + chooser.getSelectedFile());
+            return chooser.getSelectedFile();
+        } 
+    	System.exit(0);
+    	return null; //Never reached
+	}
+
+    public static void main(String[] args) {
+    	
+    	//Template image
+        BufferedImage buffTemplateOriginal = null;
+    	
+    	//Ask user some setup questions
         boolean RIGHT_ENABLED = JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,
-                "Do you want to also merge right eye images? These might cause problems if 3D was not enabled when the screenshots were taken!", "Enable right eye?",
+                "Do you want to merge right eye images? These might cause problems if 3D was not enabled when the screenshots were taken!", "SETUP: Enable right eye?",
                 JOptionPane.YES_NO_OPTION);
         boolean TEMPLATE = JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,
-                "Do you want to use the template.cfg and template.png? see README.md for details.", "Use template?",
+                "Do you want to use a template.cfg and template.png? See README.md for details.", "SETUP: Use template?",
                 JOptionPane.YES_NO_OPTION);
-             
-        FileInputStream fis;
-        BufferedImage buffTemplateOriginal = null;
         
+        
+        //Get the input, output, and template directory (if needed)
+        File LOCATION_IN = getDirFromUser("INPUT DIR", "Select the input directory!");
+        File LOCATION_OUT = getDirFromUser("OUTPUT DIR", "Select the output directory!");
+        File LOCATION_CFG = (TEMPLATE ? getDirFromUser("TEMPLATE DIR", "Select a folder with a template.cfg and .png!") : null);
+        
+        //Create lists of files and pairs.
+        File[] listOfFiles = LOCATION_IN.listFiles();
+        ArrayList<String> files = new ArrayList<>();
+        ArrayList<ImagePair> pairs = new ArrayList<>();
+        
+        //Positions of images in large image.
         int TOPX = 0;
         int TOPY = 0;
         int BOTX = 40;
         int BOTY = 240;
-                
-        if(TEMPLATE){
-            chooser.setDialogTitle("Select the folder with template.cfg and .png!");
-            ask = chooser.showOpenDialog(null);
-            if (ask == JFileChooser.APPROVE_OPTION) {
-                LOCATION_CFG = chooser.getSelectedFile();
-                System.out.println(LOCATION_CFG);
-                try {
-                    fis = new FileInputStream(new File(LOCATION_CFG.toString() + File.separator + "template.cfg"));
-                    BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-                    String line = null;
-                    while ((line = br.readLine()) != null) {
-                        if(line.contains("top:")) {
-                            TOPX = Integer.parseInt(line.substring(line.indexOf(":") + 1, line.indexOf(",")));
-                            TOPY = Integer.parseInt(line.substring(line.indexOf(",") + 1));
-                        } else if(line.contains("bottom:")) {
-                            BOTX = Integer.parseInt(line.substring(line.indexOf(":") + 1, line.indexOf(",")));
-                            BOTY = Integer.parseInt(line.substring(line.indexOf(",") + 1));
-                        }
-                    }
-                 
-                    br.close();
-                    buffTemplateOriginal = ImageIO.read(new File(LOCATION_CFG + File.separator + "template.png"));
-                } catch (FileNotFoundException e1) {
-                    TEMPLATE = false;
-                    e1.printStackTrace();
-                } catch (IOException e) {
-                    TEMPLATE = false;
-                    e.printStackTrace();
-                }
-            } else if(ask == JFileChooser.CANCEL_OPTION) {
-            	return;
-            }
-       }
         
-        File[] listOfFiles = LOCATION_IN.listFiles();
-        ArrayList<String> files = new ArrayList<>();
-        ArrayList<ImagePair> pairs = new ArrayList<>();
+        //Set up progress bar.
+        JFrame f = new JFrame("Progress...");
+        Container content = f.getContentPane();
+        Border border = BorderFactory.createTitledBorder("Matching images...");
+        JProgressBar progressBar = new JProgressBar();
+        progressBar.setBorder(border);
+        progressBar.setStringPainted(true);
+        content.add(progressBar, BorderLayout.NORTH);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setSize(300, 95);
+        f.pack();
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+                
+        //Read template file (if needed)
+        if(TEMPLATE){
+            FileInputStream fis = null;
+	        try {
+	            fis = new FileInputStream(new File(LOCATION_CFG.toString() + File.separator + "template.cfg"));
+	            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+	            String line = null;
+	            while ((line = br.readLine()) != null) {
+	                if(line.contains("top:")) {
+	                    TOPX = Integer.parseInt(line.substring(line.indexOf(":") + 1, line.indexOf(",")));
+	                    TOPY = Integer.parseInt(line.substring(line.indexOf(",") + 1));
+	                } else if(line.contains("bottom:")) {
+	                    BOTX = Integer.parseInt(line.substring(line.indexOf(":") + 1, line.indexOf(",")));
+	                    BOTY = Integer.parseInt(line.substring(line.indexOf(",") + 1));
+	                }
+	            }
+	            br.close();
+	            buffTemplateOriginal = ImageIO.read(new File(LOCATION_CFG + File.separator + "template.png"));
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return;
+	        }
+       }
 
+        //Do not add directories to files list.
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
                 files.add(listOfFiles[i].getName());
             }
         }
         
+        //Match all of the images with their counterparts.
         for (int one = 0; one < files.size(); one++) {
             for (int two = 0; two < files.size(); two++) {
                 try {
@@ -118,102 +122,73 @@ public class Main {
                             alreadyMatched = true;
                         }
                     }
-                    if(!alreadyMatched && pair.isReal()) {
+                    if(!(alreadyMatched || pair.type == ImagePair.Type.UNKNOWN)) {
                         pairs.add(pair);
                         System.out.println("Matched: " + pair);
                     }
-                } catch (UnmatchedException e) {
-                    //System.err.println("Failed to find a match for " + files.get(one) + " and " + files.get(two));
                 } catch (NumberFormatException e) {
                     System.err.println("Failed to parse a number for " + files.get(one) + " and " + files.get(two));
-                } catch (StringIndexOutOfBoundsException e) {
+                } catch (IndexOutOfBoundsException e) {
                     //System.err.println("Image in wrong naming form for " + files.get(one) + " and " + files.get(two));
-                }
+                } catch (UnmatchedException e) {
+					//No need to print, just continue matching
+				}
             }
         }
         
-        JFrame f = new JFrame("Progress...");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Container content = f.getContentPane();
-        JProgressBar progressBar = new JProgressBar();
-        progressBar.setStringPainted(true);
-        Border border = BorderFactory.createTitledBorder("Writing images...");
+        //Change text of border.
+        border = BorderFactory.createTitledBorder("Writing images...");
         progressBar.setBorder(border);
-        content.add(progressBar, BorderLayout.NORTH);
-        f.setSize(300, 95);
-        f.pack();
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
         
+        //Write images out to folder.
         for(int i = 0; i < pairs.size(); i++) {
-            ImagePair pair = pairs.get(i);
             progressBar.setValue((int)(((double)i/(double)pairs.size())*100d));
+            ImagePair pair = pairs.get(i);
             BufferedImage buffImageOne = null;
             BufferedImage buffImageTwo = null;
             try {
                 buffImageOne = ImageIO.read(new File(LOCATION_IN + File.separator + pair.getOne()));
                 buffImageTwo = ImageIO.read(new File(LOCATION_IN + File.separator +  pair.getTwo()));
-                if(!TEMPLATE) {
-                    BufferedImage finalImg = new BufferedImage(400, 240*2, BufferedImage.TYPE_4BYTE_ABGR);
-                    if(buffImageOne.getWidth() > buffImageTwo.getWidth()) {
-                        finalImg.createGraphics().drawImage(buffImageOne, 0, 0, null);
-                        finalImg.createGraphics().drawImage(buffImageTwo, 40, 240, null);
-                    } else {
-                        finalImg.createGraphics().drawImage(buffImageTwo, 0, 0, null);
-                        finalImg.createGraphics().drawImage(buffImageOne, 40, 240, null);
-                    }
-                    if(pair.isLeft()) {
-                        try {
-                        	ImageIO.write(finalImg, "png", new File(LOCATION_OUT + File.separator +  (pair.isNTR() ? "NTR_" : "scr_") + pair.getNumber() +"_MERGED.png"));
-                            System.out.println("Wrote left: " + pair);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } 
-                    if(!pair.isLeft() && RIGHT_ENABLED){
-                        try {
-                        	ImageIO.write(finalImg, "png", new File(LOCATION_OUT + File.separator +  (pair.isNTR() ? "NTR_" : "scr_") + pair.getNumber() +"_MERGED_RIGHT.png"));
-                            System.out.println("Wrote right: " + pair);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                BufferedImage largeImage = (TEMPLATE ? copyImage(buffTemplateOriginal) : new BufferedImage(400, 240*2, BufferedImage.TYPE_4BYTE_ABGR));
+                if(buffImageOne.getWidth() > buffImageTwo.getWidth()) {
+                	largeImage.createGraphics().drawImage(buffImageOne, TOPX, TOPY, null);
+                	largeImage.createGraphics().drawImage(buffImageTwo, BOTX, BOTY, null);
                 } else {
-                    BufferedImage buffTemplate = copyImage(buffTemplateOriginal);
-                    if(buffImageOne.getWidth() > buffImageTwo.getWidth()) {
-                        buffTemplate.createGraphics().drawImage(buffImageOne, TOPX, TOPY, null);
-                        buffTemplate.createGraphics().drawImage(buffImageTwo, BOTX, BOTY, null);
-                    } else {
-                        buffTemplate.createGraphics().drawImage(buffImageTwo, TOPX, TOPY, null);
-                        buffTemplate.createGraphics().drawImage(buffImageOne, BOTX, BOTY, null);
-                    }
-                    if(pair.isLeft()) {
-                        try {
-                        	ImageIO.write(buffTemplate, "png", new File(LOCATION_OUT + File.separator +  (pair.isNTR() ? "NTR_" : "scr_") + pair.getNumber() +"_MERGED.png"));
-                            System.out.println("Wrote (template) left: " + pair);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } 
-                    if(!pair.isLeft() && RIGHT_ENABLED){
-                        try {
-                        	ImageIO.write(buffTemplate, "png", new File(LOCATION_OUT + File.separator +  (pair.isNTR() ? "NTR_" : "scr_") + pair.getNumber() +"_MERGED_RIGHT.png"));
-                            System.out.println("Wrote (template) right: " + pair);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                	largeImage.createGraphics().drawImage(buffImageTwo, TOPX, TOPY, null);
+                	largeImage.createGraphics().drawImage(buffImageOne, BOTX, BOTY, null);
                 }
+                
+                try {
+                	if(pair.isLeft()) {
+                    	ImageIO.write(largeImage, "png", new File(LOCATION_OUT + File.separator + pair.getName()));
+                        System.out.println("Wrote left: " + pair);
+                	} else if(RIGHT_ENABLED) {
+                		ImageIO.write(largeImage, "png", new File(LOCATION_OUT + File.separator +  pair.getName()));
+                        System.out.println("Wrote right: " + pair);
+                	}
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         progressBar.setValue(100);
         progressBar.setString("All done!");
+        f.setTitle("Done!");
+        
+        //Close after 3 seconds
+        try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			//nothing
+		} finally {
+			System.exit(0);
+		}
     }
     
     private static BufferedImage copyImage(BufferedImage source){
-        BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
+        BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
         Graphics g = b.getGraphics();
         g.drawImage(source, 0, 0, null);
         g.dispose();

@@ -44,9 +44,9 @@ merge them together. NTR and ninjahax images can exist in the same folder and wi
 independently! 
 
 ###Examples output with template
-![An example screenshot exported with a template.](./output/scr_68_MERGED.png "Screenshot")
-![An example screenshot exported with a template.](./output/scr_85_MERGED.png "Screenshot")
+![An example screenshot exported with a template.](./output/ninjahax_68.png "Screenshot")
+![An example screenshot exported with a template.](./output/ninjahax_119.png "Screenshot")
+![Using the NTR file name format.](./output/ntr_0001.png "Screenshot")
 
 ###Examples output without template
-![An example screenshot exported with this tool alone.](./output/scr_28_MERGED.png "Screenshot")
-![An example screenshot exported with this tool alone.](./output/scr_30_MERGED.png "Screenshot")
+![An example screenshot exported with this tool alone using the testmenu filename format.](./output/testmenu_20161206_0800_00000.png "Screenshot")
