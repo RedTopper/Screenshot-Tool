@@ -1,7 +1,7 @@
-#Red's Screenshot Tool
+# Red's Screenshot Tool
 This screenshot tool takes a batch of exported screenshots and makes them into nice single images. There are some options for exporting your screenshots, too.
 
-###How to use this tool:
+### How to use this tool:
 1. Launch the program. You need Java installed on your computer.
 2. Chose if you want to export the right eye. This option will create 2 files for every screenshot! Use with care!
 2. Chose if you want to use template.cfg and template.png images in a template folder.
@@ -11,7 +11,7 @@ This screenshot tool takes a batch of exported screenshots and makes them into n
 2. Wait for the images to process
 2. Profit!
 
-###How to use template.cfg and template.png:
+### How to use template.cfg and template.png:
 1. Create template.png. It must be big enough to contain both the top and bottom screenshot. Put it in any empty folder.
 2. Create template.cfg. Put it in the template.png folder. It'll look like this:
 ```text
