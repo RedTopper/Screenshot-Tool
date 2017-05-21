@@ -49,11 +49,11 @@ This is how the program tells the difference between a top and bottom image pair
 merge them together. NTR, ninjahax, and TestMenu images can exist in the same folder and will be merged
 independently! 
 
-###Examples output with template
+### Examples output with template
 ![An example screenshot exported with a template.](./output/ninjahax_68.png "Screenshot")
 ![An example screenshot exported with a template.](./output/ninjahax_119.png "Screenshot")
 ![An example screenshot exported with a template.](./output/ninjahax_28.png "Screenshot")
 ![Using the NTR file name format.](./output/ntr_0001.png "Screenshot")
 
-###Examples output without template
+### Examples output without template
 ![An example screenshot exported with this tool alone using the testmenu filename format.](./output/testmenu_20161206_0800_00000.png "Screenshot")
