@@ -27,16 +27,16 @@ bottom:131,360
 
 Names:
 
-* "scr_[num]_BOTTOM.[ext]" (ninjahax)
-* "scr_[num]_TOP_LEFT.[ext]" (ninjahax)
-* "scr_[num]_TOP_RIGHT.[ext]" (ninjahax)
-* "bot_[num].[ext]" (NTR)
-* "top_[num].[ext]" (NTR)
-* "inf_[num].[ext]" (NTR)
-* "sup_[num].[ext]" (NTR)
-* "[date]_[time]_LO_[num].[ext]" (TestMenu)
-* "[date]_[time]_UR_[num].[ext]" (TestMenu)
-* "[date]_[time]_UL_[num].[ext]" (TestMenu)
+* "scr\_[num]\_BOTTOM.[ext]" (ninjahax)
+* "scr\_[num]\_TOP\_LEFT.[ext]" (ninjahax)
+* "scr\_[num]\_TOP\_RIGHT.[ext]" (ninjahax)
+* "bot\_[num].[ext]" (NTR)
+* "top\_[num].[ext]" (NTR)
+* "inf\_[num].[ext]" (NTR)
+* "sup\_[num].[ext]" (NTR)
+* "[date]\_[time]\_LO\_[num].[ext]" (TestMenu)
+* "[date]\_[time]\_UR\_[num].[ext]" (TestMenu)
+* "[date]\_[time]\_UL\_[num].[ext]" (TestMenu)
 
 Where the values are:
 
