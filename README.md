@@ -27,22 +27,23 @@ bottom:131,360
 
 Names:
 
-* "scr_Xn_BOTTOM.xxx" (ninjahax)
-* "scr_Xn_TOP_LEFT.xxx" (ninjahax)
-* "scr_Xn_TOP_RIGHT.xxx" (ninjahax)
-* "bot_XXXX.xxx" (NTR)
-* "top_XXXX.xxx" (NTR)
-* "YYYYMMDD_HHMM_UL_XXXXX.xxx (TestMenu)"
-* "YYYYMMDD_HHMM_UR_XXXXX.xxx (TestMenu)"
-* "YYYYMMDD_HHMM_LO_XXXXX.xxx (TestMenu)"
+* "scr_<num>_BOTTOM.<ext>" (ninjahax)
+* "scr_<num>_TOP_LEFT.<ext>" (ninjahax)
+* "scr_<num>_TOP_RIGHT.<ext>" (ninjahax)
+* "bot_<num>.<ext>" (NTR)
+* "top_<num>.<ext>" (NTR)
+* "inf_<num>.<ext>" (NTR)
+* "sup_<num>.<ext>" (NTR)
+* "<date>_<time>_LO_<num>.<ext>" (TestMenu)
+* "<date>_<time>_UR_<num>.<ext>" (TestMenu)
+* "<date>_<time>_UL_<num>.<ext>" (TestMenu)
 
 Where the values are:
 
-* Xn is any amount of numbers
-* XXXX is a four digit number
-* XXXXX is a five digit number
-* YYYYMMDD_HHMM is Year, Month, Day, Hour, and Minute.
-* xxx is a picture format (usually png or bmp)
+* <num> is a number
+* <date> is Year, Month, Day
+* <time> is Hour, Minute
+* <ext> is a picture format (usually png or bmp)
 
 The numbers for the top screen should match up with the same number for the bottom screen.
 This is how the program tells the difference between a top and bottom image pair in order to
@@ -50,10 +51,10 @@ merge them together. NTR, ninjahax, and TestMenu images can exist in the same fo
 independently! 
 
 ### Examples output with template
-![An example screenshot exported with a template.](./output/ninjahax_68.png "Screenshot")
-![An example screenshot exported with a template.](./output/ninjahax_119.png "Screenshot")
-![An example screenshot exported with a template.](./output/ninjahax_28.png "Screenshot")
-![Using the NTR file name format.](./output/ntr_0001.png "Screenshot")
+![An example screenshot exported with a template.](./output/ninjahax-68.png "Screenshot")
+![An example screenshot exported with a template.](./output/ninjahax-119.png "Screenshot")
+![An example screenshot exported with a template.](./output/ninjahax-28.png "Screenshot")
+![Using the NTR file name format.](./output/ntr-0001.png "Screenshot")
 
 ### Examples output without template
-![An example screenshot exported with this tool alone using the testmenu filename format.](./output/testmenu_20161206_0800_00000.png "Screenshot")
+![An example screenshot exported with this tool alone using the testmenu filename format.](./output/testmenu-20161206-0800-00000.png "Screenshot")
