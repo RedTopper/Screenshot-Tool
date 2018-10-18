@@ -8,10 +8,9 @@ public class Image {
 	public static final String TYPE = "png";
 	
 	private Type type = Type.UNKNOWN;
+	private Position pos = Position.LEFT;
 	private File file;
 	private String id = "";
-	private boolean right = false;
-	private boolean bottom = false;
 	
 	public Image(File file) {
 		if (file.isDirectory()) return;
@@ -31,8 +30,8 @@ public class Image {
 			}
 			
 			//Set data
-			if (type.RIGHT != null) this.right = type.RIGHT.matcher(name).find();
-			this.bottom = type.BOT.matcher(name).find();
+			pos = type.RIGHT != null && type.RIGHT.matcher(name).find() ? Position.RIGHT : pos;
+			pos = type.BOT.matcher(name).find() ? Position.BOT : pos;
 			this.type = type;
 			this.file = file;
 			
@@ -54,14 +53,14 @@ public class Image {
 	}
 	
 	public String getOutputName() {
-		return type.toString().toLowerCase() + DELEM + id + "." + TYPE;
+		if (pos == Position.LEFT) {
+			return type.toString().toLowerCase() + DELEM + id + "." + TYPE;
+		} else {
+			return type.toString().toLowerCase() + DELEM + id + DELEM + pos.toString().toLowerCase() + "." + TYPE;
+		}
 	}
 	
-	public boolean isRight() {
-		return right;
-	}
-	
-	public boolean isBottom() {
-		return bottom;
+	public Position getPos() {
+		return pos;
 	}
 }

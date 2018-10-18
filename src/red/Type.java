@@ -34,7 +34,9 @@ public enum Type {
 		Pattern.compile("(\\d+)-(\\d+)-(\\d+)_(\\d+)-(\\d+)-(\\d+)\\.(\\d+)_(top|bot)\\."),
 		null,
 		Pattern.compile("bot"),
-		new int[] {1, 2, 3, 4, 5, 6, 7}
+		//I don't know if the last digits are unique, so I'll assume the whole thing is the ID
+		//If someone wants to change this in the future, please create a PR.
+		new int[] {1, 2, 3, 4, 5, 6, 7} 
 	);
 	
 	//The pattern that matches the file

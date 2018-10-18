@@ -3,13 +3,11 @@ package red;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -33,11 +31,8 @@ public class Main {
 	//Just throw everything since the program doesn't handle errors.
 	public static void run() throws NumberFormatException, IOException, InterruptedException {
 		
-		//Template image
-		BufferedImage template = null;
-		
 		//Right eye images might look corrupted if 3D was not enabled when they were taken.
-		final boolean RIGHT_ENABLED = JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,
+		final boolean RIGHT = JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,
 			"Do you want to merge right eye images? (Might look broken)", "SETUP: Enable right eye?",
 			JOptionPane.YES_NO_OPTION
 		);
@@ -48,26 +43,19 @@ public class Main {
 			JOptionPane.YES_NO_OPTION
 		);
 		
-		
 		//Get the input, output, and template directory (if needed)
-		final File LOCATION_IN = getDirFromUser("INPUT DIR", "Select the input directory!");
-		final File LOCATION_OUT = getDirFromUser("OUTPUT DIR", "Select the output directory!");
-		final File LOCATION_CFG = (TEMPLATE ? getDirFromUser("TEMPLATE DIR", "Select a folder with a template.cfg and .png!") : null);
+		final File LOCATION_IN = getDirFromUser("[INFO] INPUT DIR", "Select the input directory!");
+		final File LOCATION_OUT = getDirFromUser("[INFO] OUTPUT DIR", "Select the output directory!");
+		final File LOCATION_CFG = (TEMPLATE ? getDirFromUser("[INFO] TEMPLATE DIR", "Select a folder with a template.cfg and .png!") : null);
 		
 		//Create lists of files and pairs.
 		ArrayList<Image> images = new ArrayList<>();
-		
-		//Positions of images in large image.
-		int TOPX = 0;
-		int TOPY = 0;
-		int BOTX = 40;
-		int BOTY = 240;
 		
 		//Set up progress bar.
 		JFrame frame = new JFrame("Progress...");
 		Container content = frame.getContentPane();
 		JProgressBar progressBar = new JProgressBar();
-		Border border = BorderFactory.createTitledBorder("Matching images...");
+		Border border = BorderFactory.createTitledBorder("Setting Up...");
 		progressBar.setBorder(border);
 		progressBar.setStringPainted(true);
 		content.add(progressBar, BorderLayout.NORTH);
@@ -78,6 +66,11 @@ public class Main {
 		frame.setVisible(true);
 		
 		//Read template file (if needed)
+		BufferedImage template = null;
+		int topX = 0;
+		int topY = 0;
+		int botX = 40;
+		int botY = 240;
 		if(TEMPLATE){
 			Scanner in = new Scanner(new File(LOCATION_CFG.toString() + File.separator + "template.cfg"));
 			template = ImageIO.read(new File(LOCATION_CFG + File.separator + "template.png"));
@@ -87,11 +80,11 @@ public class Main {
 				int x = Integer.parseInt(line.substring(line.indexOf(":") + 1, line.indexOf(",")));
 				int y = Integer.parseInt(line.substring(line.indexOf(",") + 1));
 				if(line.contains("top:")) {
-					TOPX = x;
-					TOPY = y;
+					topX = x;
+					topY = y;
 				} else if(line.contains("bottom:")) {
-					BOTX = x;
-					BOTY = y;
+					botX = x;
+					botY = y;
 				}
 			}
 			
@@ -109,39 +102,29 @@ public class Main {
 		border = BorderFactory.createTitledBorder("Writing images...");
 		progressBar.setBorder(border);
 		
-//		//Write images out to folder.
-//		for(int i = 0; i < pairs.size(); i++) {
-//			progressBar.setValue((int)(((double)i/(double)pairs.size())*100d));
-//			ImagePair pair = pairs.get(i);
-//			BufferedImage buffImageOne = null;
-//			BufferedImage buffImageTwo = null;
-//			try {
-//				buffImageOne = ImageIO.read(new File(LOCATION_IN + File.separator + pair.getOne()));
-//				buffImageTwo = ImageIO.read(new File(LOCATION_IN + File.separator +  pair.getTwo()));
-//				BufferedImage largeImage = (TEMPLATE ? copyImage(template) : new BufferedImage(400, 240*2, BufferedImage.TYPE_4BYTE_ABGR));
-//				if(buffImageOne.getWidth() > buffImageTwo.getWidth()) {
-//					largeImage.createGraphics().drawImage(buffImageOne, TOPX, TOPY, null);
-//					largeImage.createGraphics().drawImage(buffImageTwo, BOTX, BOTY, null);
-//				} else {
-//					largeImage.createGraphics().drawImage(buffImageTwo, TOPX, TOPY, null);
-//					largeImage.createGraphics().drawImage(buffImageOne, BOTX, BOTY, null);
-//				}
-//				
-//				try {
-//					if(pair.isLeft()) {
-//						ImageIO.write(largeImage, "png", new File(LOCATION_OUT + File.separator + pair.getName()));
-//						System.out.println("Wrote left: " + pair);
-//					} else if(RIGHT_ENABLED) {
-//						ImageIO.write(largeImage, "png", new File(LOCATION_OUT + File.separator +  pair.getName()));
-//						System.out.println("Wrote right: " + pair);
-//					}
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				} 
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
+		//Write images out to folder.
+		int pos = 0;
+		for(Image left : images) {
+			progressBar.setValue((int)(((double)pos++/(double)images.size())*100d));
+			if (left.getPos() != Position.LEFT) continue;
+			
+			//Find bottom image
+			Image bot = find(left, images, Position.BOT);
+			if (bot == null) continue;
+			
+			//We have both the left and bottom
+			write(left, bot, template, LOCATION_OUT, topX, topY, botX, botY);
+			
+			//Check if the user actually wants right images
+			if (!RIGHT || left.getType().RIGHT == null) continue;
+			
+			//Find right image
+			Image right = find(left, images, Position.RIGHT);
+			if (right == null) continue;
+			
+			//Write the right side image too.
+			write(right, bot, template, LOCATION_OUT, topX, topY, botX, botY);
+		}
 		
 		progressBar.setValue(100);
 		progressBar.setString("All done!");
@@ -159,21 +142,44 @@ public class Main {
 		chooser.setAcceptAllFileFilterUsed(false);
 		chooser.setDialogTitle(textTitle);
 		
-		//Show the dialogue. If the user quits, stop the program
+		//Show the dialogue.
 		if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			System.out.println(textShort + ": " + chooser.getSelectedFile());
 			return chooser.getSelectedFile();
 		}
 		
+		//If the user quits, stop the program.
 		System.exit(0);
-		return null; //Never reached
+		return null; 
 	}
 	
-	private static BufferedImage copyImage(BufferedImage source){
-		BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-		Graphics g = b.getGraphics();
-		g.drawImage(source, 0, 0, null);
-		g.dispose();
-		return b;
+	private static void write(Image top, Image bot, BufferedImage template, File dir, int topX, int topY, int botX, int botY) throws IOException {
+		BufferedImage canvas = null;
+		if (template == null) {
+			canvas = new BufferedImage(400, 240*2, BufferedImage.TYPE_4BYTE_ABGR);
+		} else {
+			canvas = new BufferedImage(template.getWidth(), template.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+			canvas.getGraphics().drawImage(template, 0, 0, null);
+		}
+		
+		BufferedImage buffTop = ImageIO.read(top.getFile());
+		BufferedImage buffBot = ImageIO.read(bot.getFile());
+		canvas.createGraphics().drawImage(buffTop, topX, topY, null);
+		canvas.createGraphics().drawImage(buffBot, botX, botY, null);
+		//ImageIO.write(canvas, Image.TYPE, new File(dir + File.separator + top.getOutputName()));
+		System.out.println("[INFO] WROTE: " + top.getOutputName());
+	}
+	
+	private static Image find(Image image, ArrayList<Image> images, Position pos) {
+		for (Image find : images) {
+			if (image.getType() == find.getType() 
+				&& image.getId().equals(find.getId()) 
+				&& find.getPos() == pos) {
+				return find;
+			}
+		}
+		
+		System.out.println("[WARN] MISSING " + pos + ": " + image.getOutputName());
+		return null;
 	}
 }
