@@ -23,6 +23,7 @@ public class Main {
 		try {
 			run();
 		} catch(Exception e) {
+			System.out.println("[FATAL] An exception occured!");
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, e.toString(), "Error - See Console", JOptionPane.INFORMATION_MESSAGE);
 		}
@@ -44,9 +45,9 @@ public class Main {
 		);
 		
 		//Get the input, output, and template directory (if needed)
-		final File LOCATION_IN = getDirFromUser("[INFO] INPUT DIR", "Select the input directory!");
-		final File LOCATION_OUT = getDirFromUser("[INFO] OUTPUT DIR", "Select the output directory!");
-		final File LOCATION_CFG = (TEMPLATE ? getDirFromUser("[INFO] TEMPLATE DIR", "Select a folder with a template.cfg and .png!") : null);
+		final File LOCATION_IN = getDirFromUser("INPUT DIR", "Select the input directory!");
+		final File LOCATION_OUT = getDirFromUser("OUTPUT DIR", "Select the output directory!");
+		final File LOCATION_CFG = (TEMPLATE ? getDirFromUser("TEMPLATE DIR", "Select a folder with a template.cfg and .png!") : null);
 		
 		//Create lists of files and pairs.
 		ArrayList<Image> images = new ArrayList<>();
@@ -144,7 +145,7 @@ public class Main {
 		
 		//Show the dialogue.
 		if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-			System.out.println(textShort + ": " + chooser.getSelectedFile());
+			System.out.println("[INFO] " + textShort + ": " + chooser.getSelectedFile());
 			return chooser.getSelectedFile();
 		}
 		
@@ -166,7 +167,7 @@ public class Main {
 		BufferedImage buffBot = ImageIO.read(bot.getFile());
 		canvas.createGraphics().drawImage(buffTop, topX, topY, null);
 		canvas.createGraphics().drawImage(buffBot, botX, botY, null);
-		//ImageIO.write(canvas, Image.TYPE, new File(dir + File.separator + top.getOutputName()));
+		ImageIO.write(canvas, Image.TYPE, new File(dir + File.separator + top.getOutputName()));
 		System.out.println("[INFO] WROTE: " + top.getOutputName());
 	}
 	
