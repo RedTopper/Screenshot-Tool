@@ -34,15 +34,18 @@ Names:
 * "top\_[num].[ext]" (NTR)
 * "inf\_[num].[ext]" (NTR)
 * "sup\_[num].[ext]" (NTR)
-* "[date]\_[time]\_LO\_[num].[ext]" (TestMenu)
-* "[date]\_[time]\_UR\_[num].[ext]" (TestMenu)
-* "[date]\_[time]\_UL\_[num].[ext]" (TestMenu)
+* "[YYYYMMDD]\_[HHMM]\_LO\_[num].[ext]" (TestMenu)
+* "[YYYYMMDD]\_[HHMM]\_UR\_[num].[ext]" (TestMenu)
+* "[YYYYMMDD]\_[HHMM]\_UL\_[num].[ext]" (TestMenu)
+* "[YYYY]-[MM]-[DD]\_[HH]-[MM]-[SS].[num]\_top.bmp" (Luma)
+* "[YYYY]-[MM]-[DD]\_[HH]-[MM]-[SS].[num]\_bot.bmp" (Luma)
+
+(If you don't see your format on here, the matching system can be found in [Type.java](./src/red/Type.java). 
+Create an issue with the format you would like added or feel free to add it yourself)
 
 Where the values are:
 
 * [num] is a number
-* [date] is Year, Month, Day
-* [time] is Hour, Minute
 * [ext] is a picture format (usually png or bmp)
 
 The numbers for the top screen should match up with the same number for the bottom screen.
