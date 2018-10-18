@@ -14,6 +14,7 @@ This screenshot tool takes a batch of exported screenshots and makes them into n
 ### How to use template.cfg and template.png:
 1. Create template.png. It must be big enough to contain both the top and bottom screenshot. Put it in any empty folder.
 2. Create template.cfg. Put it in the template.png folder. It'll look like this:
+
 ```text
 top:91,50
 bottom:131,360
@@ -22,28 +23,27 @@ bottom:131,360
 - The top: and bottom: denote where the top and bottom screen images should be placed in the template.png The first number is the X location from the top left and the second number is the Y location from the top left (always positive, includes 0).
 - Notice how there is no spaces in this document. Do not add spaces. Java will yell at you.
 
-
 ### Name format:
 
 Names:
 
-* "scr_<num>_BOTTOM.<ext>" (ninjahax)
-* "scr_<num>_TOP_LEFT.<ext>" (ninjahax)
-* "scr_<num>_TOP_RIGHT.<ext>" (ninjahax)
-* "bot_<num>.<ext>" (NTR)
-* "top_<num>.<ext>" (NTR)
-* "inf_<num>.<ext>" (NTR)
-* "sup_<num>.<ext>" (NTR)
-* "<date>_<time>_LO_<num>.<ext>" (TestMenu)
-* "<date>_<time>_UR_<num>.<ext>" (TestMenu)
-* "<date>_<time>_UL_<num>.<ext>" (TestMenu)
+* "scr_[num]_BOTTOM.[ext]" (ninjahax)
+* "scr_[num]_TOP_LEFT.[ext]" (ninjahax)
+* "scr_[num]_TOP_RIGHT.[ext]" (ninjahax)
+* "bot_[num].[ext]" (NTR)
+* "top_[num].[ext]" (NTR)
+* "inf_[num].[ext]" (NTR)
+* "sup_[num].[ext]" (NTR)
+* "[date]_[time]_LO_[num].[ext]" (TestMenu)
+* "[date]_[time]_UR_[num].[ext]" (TestMenu)
+* "[date]_[time]_UL_[num].[ext]" (TestMenu)
 
 Where the values are:
 
-* <num> is a number
-* <date> is Year, Month, Day
-* <time> is Hour, Minute
-* <ext> is a picture format (usually png or bmp)
+* [num] is a number
+* [date] is Year, Month, Day
+* [time] is Hour, Minute
+* [ext] is a picture format (usually png or bmp)
 
 The numbers for the top screen should match up with the same number for the bottom screen.
 This is how the program tells the difference between a top and bottom image pair in order to
